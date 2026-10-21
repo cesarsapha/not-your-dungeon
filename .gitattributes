@@ -1,0 +1,19 @@
+# Normaliza finais de linha dos arquivos de texto
+* text=auto eol=lf
+
+# Arquivos binários (arte, áudio, documentos) — o git não tenta fazer merge
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.psd binary
+*.kra binary
+*.aseprite binary
+*.ase binary
+*.wav binary
+*.ogg binary
+*.mp3 binary
+*.ttf binary
+*.otf binary
+*.docx binary
+*.pdf binary
