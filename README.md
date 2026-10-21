@@ -4,6 +4,22 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 
 > Projeto acadêmico. O GDD completo está em [`docs/GDD_Not_your_Dungeon.docx`](docs/GDD_Not_your_Dungeon.docx) e o resumo em [`docs/GDD.md`](docs/GDD.md).
 
+## Arte conceitual
+
+Folhas de animação (rascunhos, ainda não recortadas para uso no jogo). Ficam em [`arte/conceitos/`](arte/conceitos/).
+
+### Spike
+![Folha de animação do Spike](arte/conceitos/spike_folha_animacao.jpg)
+
+### Gordot
+![Folha de animação do Gordot](arte/conceitos/gordot_folha_animacao.jpg)
+
+### Zork
+![Folha de animação do Zork](arte/conceitos/zork_folha_animacao.jpg)
+
+### Mercenários (Lacaio e Líder)
+![Folha de animação dos mercenários](arte/conceitos/mercenarios_folha_animacao.jpg)
+
 ## Equipe
 
 - Cesar Sapha
