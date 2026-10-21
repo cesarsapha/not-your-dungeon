@@ -6,7 +6,34 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 
 ## Arte conceitual
 
-Folhas de animação (rascunhos, ainda não recortadas para uso no jogo). Ficam em [`arte/conceitos/`](arte/conceitos/).
+Rascunhos visuais do jogo (ainda não recortados para uso na Godot). Ficam em [`arte/conceitos/`](arte/conceitos/).
+
+### Menu inicial
+![Menu inicial](arte/conceitos/menu_inicial.jpg)
+
+### Mapa das masmorras
+![Mapa de seleção das masmorras](arte/conceitos/mapa_masmorras.jpg)
+
+### Personagens
+![Zork, Spike, Gordot, Thyr, Mercenário Lacaio e Líder](arte/conceitos/personagens_lineup.jpg)
+
+### Sala do trono (Fase 1, Tela 1)
+![Sala do trono do Zork](arte/conceitos/sala_do_trono.jpg)
+
+### Combate
+![Combo Vórtice Venenoso Sombrio](arte/conceitos/combate_combo.jpg)
+
+![Combate em grade hexagonal](arte/conceitos/combate_hexagonos.jpg)
+
+### Grupo e inventário
+![Tela de grupo de monstros e inventário](arte/conceitos/grupo_inventario.jpg)
+
+### Itens e armas
+| Itens | Armas |
+|---|---|
+| ![Cristais, picaretas, poções e pergaminhos](arte/conceitos/itens.jpg) | ![Espada, maça, adaga e cajado](arte/conceitos/armas.jpg) |
+
+## Folhas de animação
 
 ### Spike
 ![Folha de animação do Spike](arte/conceitos/spike_folha_animacao.jpg)
