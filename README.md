@@ -25,7 +25,34 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 | `animacoes/` | Sprite sheets e arquivos de animação |
 | `audio/` | Músicas e efeitos sonoros |
 
-O projeto Godot (`project.godot`) será criado na raiz desta pasta quando a produção começar.
+## Protótipo atual: combate por turnos
+
+Feito em **Godot 4.7.2**. Para jogar, abra a Godot, clique em **Importar**, selecione o `project.godot` desta pasta e aperte **F5**.
+
+Ele reproduz a **Fase 1, Tela 5** do GDD: Spike e Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
+
+- Ordem de turnos pela velocidade. O Gordot **sempre age primeiro**.
+- O Spike tem **+20% de vida**.
+- Ações disponíveis: Atacar, Defender, Especial (gasta SP), Item (Poção) e Fugir. Não dá para fugir porque é batalha de chefe.
+- **Combo:** o Gordot usa *Canal Sombrio* e, na mesma rodada, o Spike usa *Golpe Venenoso*. Isso dispara o **Vórtice Venenoso Sombrio**, que acerta todos os inimigos.
+
+| Arquivo | Para que serve |
+|---|---|
+| `scripts/combate/banco_dados.gd` | Atributos, habilidades e combos. **Balanceamento é aqui.** |
+| `scripts/combate/combate.gd` | Turnos, menus e regras do combate |
+| `scripts/combate/combatente.gd` | Uma unidade em campo (vida, dano, desenho) |
+
+**Arte:** por enquanto os personagens são retângulos coloridos. Se um PNG **com fundo transparente** for salvo num destes caminhos, ele aparece sozinho no jogo:
+
+- `arte/personagens/monstros/spike.png`, `arte/personagens/monstros/gordot.png`
+- `arte/inimigos/mercenario_lacaio.png`, `arte/inimigos/mercenario_lider.png`
+- `arte/cenarios/masmorra_1/fundo_combate.png` (fundo, 1280x720)
+
+**Teste automático** (simula uma batalha inteira e mostra o resultado no terminal):
+
+```
+Godot_v4.7.2-stable_win64_console.exe --headless --path . -- --autoteste
+```
 
 ## Controles
 

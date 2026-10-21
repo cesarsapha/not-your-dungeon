@@ -1,0 +1,30 @@
+; Arquivo de configuração do projeto Godot.
+
+config_version=5
+
+[application]
+
+config/name="Not your Dungeon"
+run/main_scene="res://cenas/combate.tscn"
+config/features=PackedStringArray("4.7")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[input]
+
+confirmar={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":90), Object(InputEventKey,"physical_keycode":4194309)]
+}
+voltar={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":88), Object(InputEventKey,"physical_keycode":4194305)]
+}
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
