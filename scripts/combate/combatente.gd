@@ -29,6 +29,7 @@ var vivo: bool:
 		return hp > 0
 
 var _sprite: Sprite2D
+var _anim: AnimatedSprite2D
 
 
 func configurar(d: DadosUnidade) -> void:
@@ -36,7 +37,9 @@ func configurar(d: DadosUnidade) -> void:
 	hp_max = roundi(d.hp_max * (1.0 + d.bonus_vida))
 	hp = hp_max
 	sp = d.sp_max
-	if d.textura:
+	if d.animacoes != "" and _carregar_animacoes(d.animacoes):
+		pass
+	elif d.textura:
 		_sprite = Sprite2D.new()
 		_sprite.texture = d.textura
 		_sprite.flip_h = d.espelhar
@@ -50,15 +53,62 @@ func configurar(d: DadosUnidade) -> void:
 	queue_redraw()
 
 
+## Monta as animações a partir da folha gerada por ferramentas/gerar_animacoes.py.
+func _carregar_animacoes(caminho: String) -> bool:
+	if not ResourceLoader.exists(caminho + ".png") or not FileAccess.file_exists(caminho + ".json"):
+		return false
+	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(caminho + ".json"))
+	var folha: Texture2D = load(caminho + ".png")
+	var largura: int = meta.quadro[0]
+	var altura: int = meta.quadro[1]
+	var quadros := SpriteFrames.new()
+	quadros.remove_animation("default")
+	for nome: String in meta.animacoes:
+		var info: Dictionary = meta.animacoes[nome]
+		quadros.add_animation(nome)
+		quadros.set_animation_speed(nome, info.fps)
+		quadros.set_animation_loop(nome, info.repete)
+		for i in int(info.quadros):
+			var recorte := AtlasTexture.new()
+			recorte.atlas = folha
+			recorte.region = Rect2(i * largura, int(info.linha) * altura, largura, altura)
+			quadros.add_frame(nome, recorte)
+	_anim = AnimatedSprite2D.new()
+	_anim.sprite_frames = quadros
+	_anim.centered = false
+	var escala := dados.tamanho.y / float(meta.altura_corpo)
+	_anim.scale = Vector2(escala, escala)
+	_anim.position = -Vector2(meta.pe[0], meta.pe[1]) * escala   # o pé fica na origem do nó
+	if escala < 1.0:
+		_anim.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	add_child(_anim)
+	_anim.play("parado")
+	return true
+
+
+## Toca uma animação; as que não repetem voltam para "parado" no fim (exceto a derrota).
+func tocar(nome: String) -> void:
+	if _anim == null or not _anim.sprite_frames.has_animation(nome):
+		return
+	_anim.play(nome)
+	if not _anim.sprite_frames.get_animation_loop(nome):
+		await _anim.animation_finished
+		if nome != "derrota" and _anim.animation == nome:
+			_anim.play("parado")
+
+
 func receber_dano(quantidade: int, ignorar_defesa := false) -> int:
 	if defendendo and not ignorar_defesa:
 		quantidade = ceili(quantidade / 2.0)
 	if provocando > 0 and not ignorar_defesa:
 		quantidade = ceili(quantidade * 0.7)
 	hp = maxi(0, hp - quantidade)
-	modulate = Color(1, 0.35, 0.35)
-	var t := create_tween()
-	t.tween_property(self, "modulate", Color.WHITE if vivo else Color(1, 1, 1, 0.35), 0.3)
+	if _anim:
+		tocar("dano" if vivo else "derrota")
+	else:
+		modulate = Color(1, 0.35, 0.35)
+		var t := create_tween()
+		t.tween_property(self, "modulate", Color.WHITE if vivo else Color(1, 1, 1, 0.35), 0.3)
 	queue_redraw()
 	return quantidade
 
@@ -70,17 +120,28 @@ func curar(quantidade: int) -> int:
 	return hp - antes
 
 
-func animar_ataque(destino: Vector2) -> void:
+func animar_ataque(destino: Vector2, animacao := "ataque") -> void:
 	var origem := position
+	var ida := 0.12
+	var volta := 0.15
+	if _anim and _anim.sprite_frames.has_animation(animacao):
+		var duracao := _anim.sprite_frames.get_frame_count(animacao) / _anim.sprite_frames.get_animation_speed(animacao)
+		ida = duracao * 0.4
+		volta = duracao * 0.4
 	var t := create_tween()
-	t.tween_property(self, "position", origem + (destino - origem).normalized() * 60.0, 0.12)
-	t.tween_property(self, "position", origem, 0.15)
-	await t.finished
+	t.tween_property(self, "position", origem + (destino - origem).normalized() * 60.0, ida)
+	t.tween_property(self, "position", origem, volta)
+	if _anim and _anim.sprite_frames.has_animation(animacao):
+		await tocar(animacao)
+		if t.is_running():
+			await t.finished
+	else:
+		await t.finished
 
 
 func _draw() -> void:
 	var t := dados.tamanho
-	if _sprite == null:
+	if _sprite == null and _anim == null:
 		var cor := dados.cor if vivo else Color(0.3, 0.3, 0.3)
 		draw_rect(Rect2(-t.x / 2, -t.y, t.x, t.y), cor)
 		draw_rect(Rect2(-t.x / 2, -t.y, t.x, t.y), Color.BLACK, false, 2.0)

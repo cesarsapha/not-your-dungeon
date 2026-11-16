@@ -3,7 +3,7 @@ extends Node2D
 ## Spike + Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
 ##
 ## Controles: setas navegam, Z confirma, X volta.
-## Teste automático (sem jogador):  Godot --path . -- --autoteste
+## Teste automático (sem jogador):  Godot --path . -- --autoteste   (acrescente --lento para ver em velocidade normal)
 
 enum Estado { AGUARDANDO, MENU_ACAO, MENU_ESPECIAL, ESCOLHER_ALVO }
 
@@ -42,7 +42,7 @@ var lbl_combo: Label
 
 func _ready() -> void:
 	autoteste = "--autoteste" in OS.get_cmdline_user_args()
-	if autoteste:
+	if autoteste and not "--lento" in OS.get_cmdline_user_args():
 		Engine.time_scale = 20.0
 	_montar_fundo()
 	_montar_ui()
@@ -129,6 +129,7 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			await _golpe(c, acao.alvo, 1.0, "Ataque")
 		"defender":
 			c.defendendo = true
+			c.tocar("defesa")
 			await _mensagem("%s se defende (recebe metade do dano)." % c.dados.nome)
 		"item":
 			pocoes -= 1
@@ -141,12 +142,13 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			_atualizar_status()
 			if h.provocar_turnos > 0:
 				c.provocando = h.provocar_turnos
+				await c.tocar("habilidade")
 				acoes_rodada.append({"unidade": c.dados.nome, "habilidade": h.nome})
 				await _mensagem("%s usa %s e atrai os ataques inimigos!" % [c.dados.nome, h.nome])
 				return
 			var lista: Array = _vivos(inimigos) if h.alvo_todos else [acao.alvo]
 			for alvo: Combatente in lista:
-				await _golpe(c, alvo, h.multiplicador, h.nome)
+				await _golpe(c, alvo, h.multiplicador, h.nome, h.animacao)
 				if alvo.vivo and h.veneno_turnos > 0:
 					alvo.veneno_turnos = h.veneno_turnos
 					alvo.veneno_dano = h.veneno_dano
@@ -156,8 +158,8 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			await _checar_combo(c, h)
 
 
-func _golpe(atacante: Combatente, alvo: Combatente, multiplicador: float, nome_golpe: String) -> void:
-	await atacante.animar_ataque(alvo.position)
+func _golpe(atacante: Combatente, alvo: Combatente, multiplicador: float, nome_golpe: String, animacao := "ataque") -> void:
+	await atacante.animar_ataque(alvo.position, animacao)
 	var dano := alvo.receber_dano(_calcular_dano(atacante.dados.ataque * multiplicador, alvo))
 	_numero_flutuante(alvo, str(dano), Color.ORANGE)
 	_atualizar_status()

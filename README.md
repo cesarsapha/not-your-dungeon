@@ -23,6 +23,28 @@ Modelos feitos pela equipe. A folha completa, com pose parada, ataque e habilida
 
 As poses paradas recortadas, com fundo transparente, ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/) e são usadas pelo jogo. O script [`ferramentas/recortar_modelos.py`](ferramentas/recortar_modelos.py) faz o recorte **sem alterar o desenho**: só troca o fundo azul-escuro por transparência e mantém a sombra no chão. Se a folha mudar, substitua o arquivo e rode `python ferramentas/recortar_modelos.py`. As imagens que serviram de inspiração, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
 
+## Animações (sprite sheets)
+
+| Gordot | Spike | Thyr | Zork |
+|---|---|---|---|
+| ![Gordot](arte/personagens/folhas/gordot.gif) | ![Spike](arte/personagens/folhas/spike.gif) | ![Thyr](arte/personagens/folhas/thyr.gif) | ![Zork](arte/personagens/folhas/zork.gif) |
+
+Cada personagem tem 7 animações: **parado, andar, ataque, habilidade, defesa, dano e derrota**.
+
+| Personagem | Ataque | Habilidade |
+|---|---|---|
+| Gordot | ergue o machado e golpeia com rastro | **Machadada Venenosa**: machado brilha verde, rastro e respingo de veneno |
+| Spike | ergue o tronco e golpeia; poeira no impacto | **Muralha de Tronco**: ruge com o tronco erguido, aura vermelha no chão |
+| Thyr | jato de fogo saindo da espada | **Chama do Núcleo**: fagulhas sobem e explodem num anel de fogo |
+| Zork | estocada com a lança | salto com a lança, onda de choque e poeira ao cair |
+
+Folhas de apresentação, com o nome de cada animação: [Gordot](arte/personagens/folhas/gordot_folha.png), [Spike](arte/personagens/folhas/spike_folha.png), [Thyr](arte/personagens/folhas/thyr_folha.png) e [Zork](arte/personagens/folhas/zork_folha.png).
+
+- O jogo usa `arte/personagens/monstros/<nome>_sprites.png` (uma linha por animação) e `<nome>_sprites.json` (quadros, fps e posição do pé). No combate, Spike e Gordot já tocam parado, ataque, habilidade, defesa, dano e derrota.
+- Os quadros são gerados por [`ferramentas/gerar_animacoes.py`](ferramentas/gerar_animacoes.py) **a partir das 3 poses desenhadas** de cada personagem, com respiração, inclinação, deslocamento, rotação e efeitos por cima. As poses não são redesenhadas.
+- **Limitação:** como só existem 3 poses, o **andar** é um balanço com passada e não um ciclo de pernas desenhado quadro a quadro. Para um andar completo, alguém precisa desenhar as poses intermediárias. É só adicioná-las na folha de modelos e no script.
+- Para refazer depois de mudar a folha de modelos: `python ferramentas/recortar_modelos.py` e em seguida `python ferramentas/gerar_animacoes.py`.
+
 ## Arte conceitual (primeira versão)
 
 Rascunhos visuais da primeira fase do projeto. **Atenção:** nesta versão o Spike era um goblin e o Gordot um ogro roxo. A aparência atual é a da seção acima. Ficam em [`arte/conceitos/`](arte/conceitos/).
@@ -85,7 +107,7 @@ Rascunhos visuais da primeira fase do projeto. **Atenção:** nesta versão o Sp
 | `arte/ui/` | Interface, caixas de diálogo, ícones |
 | `arte/conceitos/` | Rascunhos e concept art (primeira versão) |
 | `arte/referencias/` | Imagens de referência de cada personagem e do cenário |
-| `ferramentas/` | Script que gera a pixel art dos personagens |
+| `ferramentas/` | Scripts que recortam os modelos e geram as animações |
 | `animacoes/` | Sprite sheets e arquivos de animação |
 | `audio/` | Músicas e efeitos sonoros |
 
@@ -118,6 +140,8 @@ Ele reproduz a **Fase 1, Tela 5** do GDD: Spike e Gordot contra 2 Mercenários L
 ```
 Godot_v4.7.2-stable_win64_console.exe --headless --path . -- --autoteste
 ```
+
+Para ver a batalha automática em velocidade normal, com as animações, tire o `--headless` e acrescente `--lento` no final.
 
 ## Controles
 

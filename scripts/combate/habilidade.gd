@@ -11,3 +11,5 @@ extends Resource
 @export var veneno_dano := 0
 ## Turnos em que o usuário atrai os ataques inimigos e recebe 30% menos dano.
 @export var provocar_turnos := 0
+## Animação tocada ao usar (linha da folha de sprites: "habilidade", "ataque"...).
+@export var animacao := "habilidade"

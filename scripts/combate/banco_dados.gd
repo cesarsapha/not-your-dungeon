@@ -11,11 +11,14 @@ static func spike() -> DadosUnidade:
 	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.8, 0.45, 0.2), Vector2(157, 143))
 	d.bonus_vida = 0.2
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
+	d.animacoes = "res://arte/personagens/monstros/spike_sprites"
 	var muralha := _habilidade("Muralha de Tronco", 8, 0.0, "Atrai os ataques inimigos para si por 2 turnos e recebe 30% menos dano.")
 	muralha.provocar_turnos = 2
+	var esmagar := _habilidade("Esmagar com Tronco", 10, 1.8, "Golpe pesado com o tronco. Se Gordot usou Machadada Venenosa na mesma rodada, dispara o COMBO.")
+	esmagar.animacao = "ataque"
 	d.habilidades.assign([
 		muralha,
-		_habilidade("Esmagar com Tronco", 10, 1.8, "Golpe pesado com o tronco. Se Gordot usou Machadada Venenosa na mesma rodada, dispara o COMBO."),
+		esmagar,
 	])
 	return d
 
@@ -25,6 +28,7 @@ static func gordot() -> DadosUnidade:
 	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.4, 0.65, 0.25), Vector2(161, 126))
 	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
+	d.animacoes = "res://arte/personagens/monstros/gordot_sprites"
 	d.habilidades.assign([
 		_habilidade("Machadada Venenosa", 8, 1.3, "Golpe rápido com o machado que envenena o alvo por 3 turnos.", false, 3, 6),
 	])

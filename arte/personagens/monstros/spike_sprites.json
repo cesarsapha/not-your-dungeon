@@ -1,0 +1,55 @@
+{
+  "quadro": [
+    507,
+    323
+  ],
+  "pe": [
+    229,
+    251
+  ],
+  "altura_corpo": 225,
+  "animacoes": {
+    "parado": {
+      "linha": 0,
+      "quadros": 6,
+      "fps": 6,
+      "repete": true
+    },
+    "andar": {
+      "linha": 1,
+      "quadros": 8,
+      "fps": 10,
+      "repete": true
+    },
+    "ataque": {
+      "linha": 2,
+      "quadros": 8,
+      "fps": 12,
+      "repete": false
+    },
+    "habilidade": {
+      "linha": 3,
+      "quadros": 7,
+      "fps": 10,
+      "repete": false
+    },
+    "defesa": {
+      "linha": 4,
+      "quadros": 5,
+      "fps": 10,
+      "repete": false
+    },
+    "dano": {
+      "linha": 5,
+      "quadros": 4,
+      "fps": 12,
+      "repete": false
+    },
+    "derrota": {
+      "linha": 6,
+      "quadros": 8,
+      "fps": 8,
+      "repete": false
+    }
+  }
+}

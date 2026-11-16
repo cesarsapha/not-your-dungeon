@@ -23,4 +23,7 @@ extends Resource
 ## Tamanho em tela (largura x altura) do personagem.
 @export var tamanho := Vector2(60, 100)
 @export var textura: Texture2D
+## Caminho da folha de animações sem extensão (usa <caminho>.png e <caminho>.json).
+## Se existir, substitui a textura parada.
+@export var animacoes := ""
 @export var espelhar := false
