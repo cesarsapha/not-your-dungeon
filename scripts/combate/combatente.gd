@@ -42,6 +42,9 @@ func configurar(d: DadosUnidade) -> void:
 		_sprite.flip_h = d.espelhar
 		var escala := d.tamanho.y / d.textura.get_height()
 		_sprite.scale = Vector2(escala, escala)
+		# Reduzir pixel art em escala não inteira serrilha; nesse caso suaviza
+		if escala < 1.0:
+			_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		_sprite.position = Vector2(0, -d.tamanho.y / 2)
 		add_child(_sprite)
 	queue_redraw()

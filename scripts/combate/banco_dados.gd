@@ -8,25 +8,25 @@ extends RefCounted
 
 ## Ogro tanque (GDD: possui vida adicional).
 static func spike() -> DadosUnidade:
-	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.55, 0.12, 0.1), Vector2(160, 132))
+	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.8, 0.45, 0.2), Vector2(157, 143))
 	d.bonus_vida = 0.2
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
 	var muralha := _habilidade("Muralha de Tronco", 8, 0.0, "Atrai os ataques inimigos para si por 2 turnos e recebe 30% menos dano.")
 	muralha.provocar_turnos = 2
 	d.habilidades.assign([
 		muralha,
-		_habilidade("Esmagar com Tronco", 10, 1.8, "Golpe pesado com o tronco. Se Gordot usou Martelada Venenosa na mesma rodada, dispara o COMBO."),
+		_habilidade("Esmagar com Tronco", 10, 1.8, "Golpe pesado com o tronco. Se Gordot usou Machadada Venenosa na mesma rodada, dispara o COMBO."),
 	])
 	return d
 
 
 ## Orc veloz e venenoso (GDD: grande velocidade, tende a agir primeiro).
 static func gordot() -> DadosUnidade:
-	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.3, 0.42, 0.24), Vector2(144, 132))
+	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.4, 0.65, 0.25), Vector2(161, 126))
 	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
 	d.habilidades.assign([
-		_habilidade("Martelada Venenosa", 8, 1.3, "Golpe rápido que envenena o alvo por 3 turnos.", false, 3, 6),
+		_habilidade("Machadada Venenosa", 8, 1.3, "Golpe rápido com o machado que envenena o alvo por 3 turnos.", false, 3, 6),
 	])
 	return d
 
@@ -53,7 +53,7 @@ static func combos() -> Array[Combo]:
 	var c := Combo.new()
 	c.nome = "Esmagamento Tóxico"
 	c.primeiro_unidade = "Gordot"
-	c.primeiro_habilidade = "Martelada Venenosa"
+	c.primeiro_habilidade = "Machadada Venenosa"
 	c.segundo_unidade = "Spike"
 	c.segundo_habilidade = "Esmagar com Tronco"
 	c.multiplicador = 0.8

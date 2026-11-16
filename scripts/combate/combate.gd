@@ -505,7 +505,7 @@ func _buscar_monstro(nome: String) -> Combatente:
 ## Usado só no --autoteste: Spike provoca na 1ª rodada; depois Gordot prepara o combo e Spike o completa.
 func _acao_automatica(c: Combatente) -> Dictionary:
 	var alvo: Combatente = _vivos(inimigos)[0]
-	var preferida := "Martelada Venenosa"
+	var preferida := "Machadada Venenosa"
 	if c.dados.nome == "Spike":
 		preferida = "Muralha de Tronco" if rodada == 1 else "Esmagar com Tronco"
 	for h in c.dados.habilidades:

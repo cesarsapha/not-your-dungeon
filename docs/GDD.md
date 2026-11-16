@@ -27,20 +27,22 @@ O objetivo é impedir a extinção dos monstros e recuperar a liberdade deles. L
 
 ## Personagens
 
-![Pixel art dos personagens](../arte/personagens/fichas_pixelart.png)
+![Personagens: pose parada](../arte/personagens/fichas_pixelart.png)
+
+Folha completa com poses de ataque e habilidade: [`modelos_definitivos.jpg`](../arte/personagens/modelos_definitivos.jpg).
 
 | Personagem | Papel | Atributo | Habilidade única |
 |---|---|---|---|
 | **Spike** | tanque (defesa) | vida adicional | **Muralha de Tronco:** atrai os ataques inimigos por 2 turnos e recebe 30% menos dano |
-| **Gordot** | agilidade (veneno) | grande velocidade, tende a agir primeiro | **Martelada Venenosa:** golpe rápido que envenena por 3 turnos; enche mais o stagger de quem já está envenenado |
+| **Gordot** | agilidade (veneno) | grande velocidade, tende a agir primeiro | **Machadada Venenosa:** golpe rápido com o machado que envenena por 3 turnos; enche mais o stagger de quem já está envenenado |
 | **Thyr** | magia | ganha mais experiência | **Chama do Núcleo:** dano mágico em todos os inimigos, com chance de queimadura |
 | **Zork** | chefe da masmorra (não jogável) | — | — |
 
-**Aparência** (tom sombrio e ameaçador)
-- **Spike:** ogro brutal de pele vermelho-sangue escura, manchas purulentas nos ombros, um olho em brasa, presas amareladas sujas de sangue, tanga surrada e um tronco ensanguentado como clava.
-- **Gordot:** orc de pele verde doentia, chifres curvos, olhos magenta brilhantes, colete de couro com caveira no peito e martelo de guerra coberto de veneno que escorre.
-- **Thyr:** espectro de armadura carbonizada e rachada, núcleo de fogo no peito, lava nas fendas, chama roxa na cabeça, garras de fogo e farrapos de sombra; empunha uma lâmina de cristal.
-- **Zork:** rei-sombra negro com coroa de chifres, brilhos brancos frios na armadura, garras e lança.
+**Aparência**
+- **Spike:** ogro corpulento de pele laranja com manchas amarelas nos ombros, presas inferiores, tanga marrom e um tronco como clava.
+- **Gordot:** criatura reptiliana de escamas verdes e barriga amarelada, cristas na cabeça, olhos amarelos, cauda longa, cachecol roxo e machado de lâmina larga com ponta de lança.
+- **Thyr:** guerreiro de pedra e armadura escura com fendas de lava, a cabeça tomada por chamas e uma espada incandescente que lança fogo.
+- **Zork:** cavaleiro de armadura negro-azulada com elmo coroado de chifres e espinhos, luz branca no rosto, cruz luminosa no peito, saiote roxo e lança longa.
 
 Os monstros têm **especialidades naturais** (combate físico, defesa, magia, agilidade ou suporte), mas também podem aprender habilidades de fora da especialidade.
 

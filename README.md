@@ -6,20 +6,22 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 
 > Projeto acadêmico. O GDD completo está em [`docs/GDD_Not_your_Dungeon.docx`](docs/GDD_Not_your_Dungeon.docx) e o resumo em [`docs/GDD.md`](docs/GDD.md).
 
-## Personagens (pixel art atual)
+## Personagens (modelos definitivos)
 
 ![Spike, Gordot, Thyr e Zork](arte/personagens/fichas_pixelart.png)
 
-| Personagem | Papel | Atributo | Habilidade única | Referência |
+| Personagem | Papel | Atributo | Habilidade única | Inspiração |
 |---|---|---|---|---|
 | **Spike** | tanque | vida adicional | Muralha de Tronco | [ogro com tronco](arte/referencias/spike/spike_referencia.png) |
-| **Gordot** | veloz / veneno | age primeiro | Martelada Venenosa | [orc com martelo](arte/referencias/gordot/gordot_referencia.jpg) |
+| **Gordot** | veloz / veneno | age primeiro | Machadada Venenosa | [orc com martelo](arte/referencias/gordot/gordot_referencia.jpg) |
 | **Thyr** | mago | ganha mais experiência | Chama do Núcleo | [espectro de fogo](arte/referencias/thyr/thyr_referencia.png) |
 | **Zork** | chefe da masmorra (não jogável) | — | — | [rei-sombra](arte/referencias/zork/zork_referencia.png) |
 
-Os sprites (fundo transparente) ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/). Eles são gerados **a partir das imagens de referência** pelo script [`ferramentas/converter_referencias.py`](ferramentas/converter_referencias.py), que remove o fundo, reduz para a resolução do sprite e aplica um tom mais sombrio, com olhos brilhando, sangue e veneno. Para refazer, rode `python ferramentas/converter_referencias.py`. As referências, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
+Modelos feitos pela equipe. A folha completa, com pose parada, ataque e habilidade de cada um, está em [`arte/personagens/modelos_definitivos.jpg`](arte/personagens/modelos_definitivos.jpg):
 
-> **Origem das referências:** os sprites são derivados diretamente das imagens de referência. Se essas imagens forem de outros artistas, citem a fonte ou redesenhem os sprites antes de qualquer uso fora do contexto acadêmico.
+![Folha de modelos](arte/personagens/modelos_definitivos.jpg)
+
+As poses paradas recortadas, com fundo transparente, ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/) e são usadas pelo jogo. O script [`ferramentas/recortar_modelos.py`](ferramentas/recortar_modelos.py) faz o recorte **sem alterar o desenho**: só troca o fundo azul-escuro por transparência e mantém a sombra no chão. Se a folha mudar, substitua o arquivo e rode `python ferramentas/recortar_modelos.py`. As imagens que serviram de inspiração, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
 
 ## Arte conceitual (primeira versão)
 
@@ -95,9 +97,9 @@ Ele reproduz a **Fase 1, Tela 5** do GDD: Spike e Gordot contra 2 Mercenários L
 
 - Ordem de turnos pela velocidade. O Gordot **sempre age primeiro**.
 - O Spike é o tanque: tem **+20% de vida** e a **Muralha de Tronco**, que atrai os ataques inimigos por 2 turnos com 30% menos dano.
-- O Gordot envenena com a **Martelada Venenosa**.
+- O Gordot envenena com a **Machadada Venenosa**.
 - Ações disponíveis: Atacar, Defender, Especial (gasta SP), Item (Poção) e Fugir. Não dá para fugir porque é batalha de chefe.
-- **Combo:** o Gordot usa *Martelada Venenosa* e, na mesma rodada, o Spike usa *Esmagar com Tronco*. Isso dispara o **Esmagamento Tóxico**, que acerta todos os inimigos.
+- **Combo:** o Gordot usa *Machadada Venenosa* e, na mesma rodada, o Spike usa *Esmagar com Tronco*. Isso dispara o **Esmagamento Tóxico**, que acerta todos os inimigos.
 - Ainda não implementado (previsto no GDD): MP para magias, stagger, moral, crítico com tempo e o Thyr no combate.
 
 | Arquivo | Para que serve |
