@@ -14,6 +14,11 @@ var defendendo := false:
 		queue_redraw()
 var veneno_turnos := 0
 var veneno_dano := 0
+## Turnos restantes de provocação (atrai ataques e recebe 30% menos dano).
+var provocando := 0:
+	set(valor):
+		provocando = valor
+		queue_redraw()
 var selecionado := false:
 	set(valor):
 		selecionado = valor
@@ -45,6 +50,8 @@ func configurar(d: DadosUnidade) -> void:
 func receber_dano(quantidade: int, ignorar_defesa := false) -> int:
 	if defendendo and not ignorar_defesa:
 		quantidade = ceili(quantidade / 2.0)
+	if provocando > 0 and not ignorar_defesa:
+		quantidade = ceili(quantidade * 0.7)
 	hp = maxi(0, hp - quantidade)
 	modulate = Color(1, 0.35, 0.35)
 	var t := create_tween()
@@ -87,6 +94,8 @@ func _draw() -> void:
 		draw_string(fonte, Vector2(largura / 2 + 4, topo + 9), "VEN", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color.GREEN_YELLOW)
 	if defendendo:
 		draw_string(fonte, Vector2(-largura / 2 - 32, topo + 9), "DEF", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color.SKY_BLUE)
+	elif provocando > 0:
+		draw_string(fonte, Vector2(-largura / 2 - 38, topo + 9), "PROV", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color.ORANGE)
 
 	if selecionado:
 		var y := topo - 8

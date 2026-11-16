@@ -61,6 +61,8 @@ func _loop_combate() -> void:
 			if not c.vivo:
 				continue
 			c.defendendo = false
+			if c.provocando > 0:
+				c.provocando -= 1
 			await _aplicar_veneno(c)
 			if _checar_fim():
 				return
@@ -106,7 +108,10 @@ func _turno_inimigo(c: Combatente) -> void:
 	await get_tree().create_timer(0.4).timeout
 	var possiveis := _vivos(monstros)
 	var alvo: Combatente = possiveis.pick_random()
-	if randf() < 0.5:
+	var provocadores := possiveis.filter(func(m: Combatente) -> bool: return m.provocando > 0)
+	if not provocadores.is_empty():
+		alvo = provocadores[0]
+	elif randf() < 0.5:
 		# Metade das vezes mira no monstro mais ferido
 		for m in possiveis:
 			if m.hp < alvo.hp:
@@ -134,6 +139,11 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			var h: Habilidade = acao.habilidade
 			c.sp -= h.custo_sp
 			_atualizar_status()
+			if h.provocar_turnos > 0:
+				c.provocando = h.provocar_turnos
+				acoes_rodada.append({"unidade": c.dados.nome, "habilidade": h.nome})
+				await _mensagem("%s usa %s e atrai os ataques inimigos!" % [c.dados.nome, h.nome])
+				return
 			var lista: Array = _vivos(inimigos) if h.alvo_todos else [acao.alvo]
 			for alvo: Combatente in lista:
 				await _golpe(c, alvo, h.multiplicador, h.nome)
@@ -181,7 +191,7 @@ func _checar_combo(c: Combatente, h: Habilidade) -> void:
 			var dano := alvo.receber_dano(_calcular_dano(poder, alvo))
 			_numero_flutuante(alvo, str(dano), Color.VIOLET)
 		_atualizar_status()
-		await _mensagem("O vórtice atinge todos os inimigos!", 1.2)
+		await _mensagem("O combo atinge todos os inimigos!", 1.2)
 		for alvo in atingidos:
 			if not alvo.vivo:
 				await _mensagem("%s foi derrotado!" % alvo.dados.nome, 0.6)
@@ -266,7 +276,7 @@ func _confirmar_menu() -> void:
 			lbl_info.text = "SP insuficiente para %s!" % h.nome
 			return
 		acao_pendente = {"tipo": "habilidade", "habilidade": h}
-		if h.alvo_todos:
+		if h.alvo_todos or h.provocar_turnos > 0:
 			_emitir(acao_pendente)
 		else:
 			_escolher_alvo(_vivos(inimigos))
@@ -315,6 +325,13 @@ func _limpar_selecao() -> void:
 		c.selecionado = false
 
 
+## Setas (ações ui_*) ou WASD, como no GDD.
+func _direcao(event: InputEvent, acao: String, tecla: Key) -> bool:
+	if event.is_action_pressed(acao):
+		return true
+	return event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == tecla
+
+
 func _emitir(acao: Dictionary) -> void:
 	estado = Estado.AGUARDANDO
 	lbl_menu.text = ""
@@ -330,10 +347,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match estado:
 		Estado.MENU_ACAO, Estado.MENU_ESPECIAL:
-			if event.is_action_pressed("ui_up"):
+			if _direcao(event, "ui_up", KEY_W):
 				indice = posmod(indice - 1, opcoes.size())
 				_desenhar_menu()
-			elif event.is_action_pressed("ui_down"):
+			elif _direcao(event, "ui_down", KEY_S):
 				indice = posmod(indice + 1, opcoes.size())
 				_desenhar_menu()
 			elif event.is_action_pressed("confirmar"):
@@ -341,10 +358,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			elif event.is_action_pressed("voltar") and estado == Estado.MENU_ESPECIAL:
 				_menu_principal()
 		Estado.ESCOLHER_ALVO:
-			if event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up"):
+			if _direcao(event, "ui_left", KEY_A) or _direcao(event, "ui_up", KEY_W):
 				indice_alvo = posmod(indice_alvo - 1, alvos.size())
 				_marcar_alvo()
-			elif event.is_action_pressed("ui_right") or event.is_action_pressed("ui_down"):
+			elif _direcao(event, "ui_right", KEY_D) or _direcao(event, "ui_down", KEY_S):
 				indice_alvo = posmod(indice_alvo + 1, alvos.size())
 				_marcar_alvo()
 			elif event.is_action_pressed("confirmar"):
@@ -485,10 +502,12 @@ func _buscar_monstro(nome: String) -> Combatente:
 	return null
 
 
-## Usado só no --autoteste: Gordot prepara o combo e Spike o completa.
+## Usado só no --autoteste: Spike provoca na 1ª rodada; depois Gordot prepara o combo e Spike o completa.
 func _acao_automatica(c: Combatente) -> Dictionary:
 	var alvo: Combatente = _vivos(inimigos)[0]
-	var preferida := "Canal Sombrio" if c.dados.nome == "Gordot" else "Golpe Venenoso"
+	var preferida := "Martelada Venenosa"
+	if c.dados.nome == "Spike":
+		preferida = "Muralha de Tronco" if rodada == 1 else "Esmagar com Tronco"
 	for h in c.dados.habilidades:
 		if h.nome == preferida and c.sp >= h.custo_sp:
 			return {"tipo": "habilidade", "habilidade": h, "alvo": alvo}
