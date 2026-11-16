@@ -8,7 +8,7 @@ extends RefCounted
 
 ## Ogro tanque (GDD: possui vida adicional).
 static func spike() -> DadosUnidade:
-	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.8, 0.38, 0.17), Vector2(128, 128))
+	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.55, 0.12, 0.1), Vector2(160, 132))
 	d.bonus_vida = 0.2
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
 	var muralha := _habilidade("Muralha de Tronco", 8, 0.0, "Atrai os ataques inimigos para si por 2 turnos e recebe 30% menos dano.")
@@ -22,7 +22,7 @@ static func spike() -> DadosUnidade:
 
 ## Orc veloz e venenoso (GDD: grande velocidade, tende a agir primeiro).
 static func gordot() -> DadosUnidade:
-	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.38, 0.57, 0.49), Vector2(128, 128))
+	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.3, 0.42, 0.24), Vector2(144, 132))
 	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
 	d.habilidades.assign([

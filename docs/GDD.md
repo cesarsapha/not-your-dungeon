@@ -36,11 +36,11 @@ O objetivo é impedir a extinção dos monstros e recuperar a liberdade deles. L
 | **Thyr** | magia | ganha mais experiência | **Chama do Núcleo:** dano mágico em todos os inimigos, com chance de queimadura |
 | **Zork** | chefe da masmorra (não jogável) | — | — |
 
-**Aparência**
-- **Spike:** ogro corpulento de pele laranja-avermelhada, manchas amarelas nos ombros, presas aparentes, tanga de couro e um tronco como clava.
-- **Gordot:** orc ágil de pele verde-azulada, chifres claros, olhos magenta, colete de couro, frasco de veneno no cinto e martelo coberto de veneno.
-- **Thyr:** espectro de armadura carbonizada, núcleo de fogo no peito, rachaduras de lava, chama roxa no elmo, farrapos (flutua) e cajado de cristal.
-- **Zork:** rei-sombra de armadura escura com coroa de chifres, olhos brancos brilhantes, capa em farrapos e lança.
+**Aparência** (tom sombrio e ameaçador)
+- **Spike:** ogro brutal de pele vermelho-sangue escura, manchas purulentas nos ombros, um olho em brasa, presas amareladas sujas de sangue, tanga surrada e um tronco ensanguentado como clava.
+- **Gordot:** orc de pele verde doentia, chifres curvos, olhos magenta brilhantes, colete de couro com caveira no peito e martelo de guerra coberto de veneno que escorre.
+- **Thyr:** espectro de armadura carbonizada e rachada, núcleo de fogo no peito, lava nas fendas, chama roxa na cabeça, garras de fogo e farrapos de sombra; empunha uma lâmina de cristal.
+- **Zork:** rei-sombra negro com coroa de chifres, brilhos brancos frios na armadura, garras e lança.
 
 Os monstros têm **especialidades naturais** (combate físico, defesa, magia, agilidade ou suporte), mas também podem aprender habilidades de fora da especialidade.
 

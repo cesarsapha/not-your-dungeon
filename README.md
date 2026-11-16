@@ -17,7 +17,9 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 | **Thyr** | mago | ganha mais experiência | Chama do Núcleo | [espectro de fogo](arte/referencias/thyr/thyr_referencia.png) |
 | **Zork** | chefe da masmorra (não jogável) | — | — | [rei-sombra](arte/referencias/zork/zork_referencia.png) |
 
-Os sprites (64x64, fundo transparente) ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/) e são gerados pelo script [`ferramentas/gerar_pixelart.py`](ferramentas/gerar_pixelart.py). Para mudar cores ou formas, edite o script e rode `python ferramentas/gerar_pixelart.py`. As imagens de referência, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
+Os sprites (fundo transparente) ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/). Eles são gerados **a partir das imagens de referência** pelo script [`ferramentas/converter_referencias.py`](ferramentas/converter_referencias.py), que remove o fundo, reduz para a resolução do sprite e aplica um tom mais sombrio, com olhos brilhando, sangue e veneno. Para refazer, rode `python ferramentas/converter_referencias.py`. As referências, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
+
+> **Origem das referências:** os sprites são derivados diretamente das imagens de referência. Se essas imagens forem de outros artistas, citem a fonte ou redesenhem os sprites antes de qualquer uso fora do contexto acadêmico.
 
 ## Arte conceitual (primeira versão)
 
