@@ -1,55 +1,115 @@
 {
   "quadro": [
-    507,
-    323
+    437,
+    352
   ],
-  "pe": [
-    229,
-    251
-  ],
-  "altura_corpo": 225,
   "animacoes": {
     "parado": {
       "linha": 0,
-      "quadros": 6,
-      "fps": 6,
-      "repete": true
-    },
-    "andar": {
-      "linha": 1,
-      "quadros": 8,
-      "fps": 10,
+      "quadros": 3,
+      "fps": 4,
       "repete": true
     },
     "ataque": {
-      "linha": 2,
-      "quadros": 8,
-      "fps": 12,
+      "linha": 1,
+      "quadros": 3,
+      "fps": 7,
       "repete": false
     },
     "habilidade": {
+      "linha": 2,
+      "quadros": 3,
+      "fps": 6,
+      "repete": false
+    },
+    "magia": {
       "linha": 3,
-      "quadros": 7,
-      "fps": 10,
+      "quadros": 2,
+      "fps": 5,
+      "repete": false
+    },
+    "item": {
+      "linha": 4,
+      "quadros": 1,
+      "fps": 2,
       "repete": false
     },
     "defesa": {
-      "linha": 4,
-      "quadros": 5,
-      "fps": 10,
+      "linha": 5,
+      "quadros": 3,
+      "fps": 6,
       "repete": false
     },
     "dano": {
-      "linha": 5,
-      "quadros": 4,
-      "fps": 12,
-      "repete": false
-    },
-    "derrota": {
       "linha": 6,
-      "quadros": 8,
+      "quadros": 3,
       "fps": 8,
       "repete": false
+    },
+    "stagger": {
+      "linha": 7,
+      "quadros": 3,
+      "fps": 4,
+      "repete": true
+    },
+    "derrota": {
+      "linha": 8,
+      "quadros": 2,
+      "fps": 3,
+      "repete": false
+    },
+    "vitoria": {
+      "linha": 9,
+      "quadros": 1,
+      "fps": 2,
+      "repete": false
+    },
+    "andar_frente": {
+      "linha": 10,
+      "quadros": 3,
+      "fps": 6,
+      "repete": true
+    },
+    "costas": {
+      "linha": 11,
+      "quadros": 1,
+      "fps": 1,
+      "repete": false
+    },
+    "andar_lado": {
+      "linha": 12,
+      "quadros": 2,
+      "fps": 5,
+      "repete": true
+    },
+    "interacao": {
+      "linha": 13,
+      "quadros": 3,
+      "fps": 5,
+      "repete": false
+    },
+    "especial": {
+      "linha": 14,
+      "quadros": 1,
+      "fps": 1,
+      "repete": false
+    },
+    "alerta": {
+      "linha": 15,
+      "quadros": 1,
+      "fps": 1,
+      "repete": false
+    },
+    "retrato": {
+      "linha": 16,
+      "quadros": 1,
+      "fps": 1,
+      "repete": false
     }
-  }
+  },
+  "pe": [
+    216,
+    303
+  ],
+  "altura_corpo": 214
 }

@@ -53,47 +53,28 @@ func configurar(d: DadosUnidade) -> void:
 	queue_redraw()
 
 
-## Monta as animações a partir da folha gerada por ferramentas/gerar_animacoes.py.
+## Monta as animações a partir da folha de sprites (ver scripts/comum/folha_sprites.gd).
 func _carregar_animacoes(caminho: String) -> bool:
-	if not ResourceLoader.exists(caminho + ".png") or not FileAccess.file_exists(caminho + ".json"):
+	_anim = FolhaSprites.criar(caminho, dados.tamanho.y, dados.espelhar)
+	if _anim == null:
 		return false
-	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(caminho + ".json"))
-	var folha: Texture2D = load(caminho + ".png")
-	var largura: int = meta.quadro[0]
-	var altura: int = meta.quadro[1]
-	var quadros := SpriteFrames.new()
-	quadros.remove_animation("default")
-	for nome: String in meta.animacoes:
-		var info: Dictionary = meta.animacoes[nome]
-		quadros.add_animation(nome)
-		quadros.set_animation_speed(nome, info.fps)
-		quadros.set_animation_loop(nome, info.repete)
-		for i in int(info.quadros):
-			var recorte := AtlasTexture.new()
-			recorte.atlas = folha
-			recorte.region = Rect2(i * largura, int(info.linha) * altura, largura, altura)
-			quadros.add_frame(nome, recorte)
-	_anim = AnimatedSprite2D.new()
-	_anim.sprite_frames = quadros
-	_anim.centered = false
-	var escala := dados.tamanho.y / float(meta.altura_corpo)
-	_anim.scale = Vector2(escala, escala)
-	_anim.position = -Vector2(meta.pe[0], meta.pe[1]) * escala   # o pé fica na origem do nó
-	if escala < 1.0:
-		_anim.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	add_child(_anim)
 	_anim.play("parado")
 	return true
 
 
-## Toca uma animação; as que não repetem voltam para "parado" no fim (exceto a derrota).
+## Animações que terminam segurando o último quadro em vez de voltar para "parado".
+const SEGURAM := ["derrota", "vitoria", "defesa"]
+
+
+## Toca uma animação; as que não repetem voltam para "parado" no fim (exceto as de SEGURAM).
 func tocar(nome: String) -> void:
 	if _anim == null or not _anim.sprite_frames.has_animation(nome):
 		return
 	_anim.play(nome)
 	if not _anim.sprite_frames.get_animation_loop(nome):
 		await _anim.animation_finished
-		if nome != "derrota" and _anim.animation == nome:
+		if not nome in SEGURAM and _anim.animation == nome:
 			_anim.play("parado")
 
 

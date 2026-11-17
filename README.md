@@ -6,44 +6,40 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 
 > Projeto acadêmico. O GDD completo está em [`docs/GDD_Not_your_Dungeon.docx`](docs/GDD_Not_your_Dungeon.docx) e o resumo em [`docs/GDD.md`](docs/GDD.md).
 
-## Personagens (modelos definitivos)
+## Personagens (sprites atuais)
 
 ![Spike, Gordot, Thyr e Zork](arte/personagens/fichas_pixelart.png)
 
-| Personagem | Papel | Atributo | Habilidade única | Inspiração |
-|---|---|---|---|---|
-| **Spike** | tanque | vida adicional | Muralha de Tronco | [ogro com tronco](arte/referencias/spike/spike_referencia.png) |
-| **Gordot** | veloz / veneno | age primeiro | Machadada Venenosa | [orc com martelo](arte/referencias/gordot/gordot_referencia.jpg) |
-| **Thyr** | mago | ganha mais experiência | Chama do Núcleo | [espectro de fogo](arte/referencias/thyr/thyr_referencia.png) |
-| **Zork** | chefe da masmorra (não jogável) | — | — | [rei-sombra](arte/referencias/zork/zork_referencia.png) |
+| Personagem | Aparência (sprites) | Atributo (GDD) |
+|---|---|---|
+| **Spike** | réptil com cimitarra, cachecol roxo e cauda | vida adicional |
+| **Gordot** | ogro roxo com tronco de madeira | grande velocidade, age primeiro |
+| **Thyr** | armadura vazia com chama saindo da gola, garra e espada de fogo | ganha mais experiência |
+| **Zork** | cavaleiro escuro com elmo de chifres, lança e aura ciano | chefe da masmorra (não jogável) |
 
-Modelos feitos pela equipe. A folha completa, com pose parada, ataque e habilidade de cada um, está em [`arte/personagens/modelos_definitivos.jpg`](arte/personagens/modelos_definitivos.jpg):
+> As descrições de **aparência e habilidade** dentro do GDD ainda falam dos modelos anteriores (Spike ogro, Gordot réptil). Falta a equipe revisar esse texto.
 
-![Folha de modelos](arte/personagens/modelos_definitivos.jpg)
-
-As poses paradas recortadas, com fundo transparente, ficam em [`arte/personagens/monstros/`](arte/personagens/monstros/) e são usadas pelo jogo. O script [`ferramentas/recortar_modelos.py`](ferramentas/recortar_modelos.py) faz o recorte **sem alterar o desenho**: só troca o fundo azul-escuro por transparência e mantém a sombra no chão. Se a folha mudar, substitua o arquivo e rode `python ferramentas/recortar_modelos.py`. As imagens que serviram de inspiração, incluindo os mapas de cenário, estão em [`arte/referencias/`](arte/referencias/).
+NPCs e inimigos: **Mercenário** ([folha](arte/personagens/folhas/mercenario_folha.png)), **Vendedor** e **Animal de carga** ([`arte/personagens/npcs/`](arte/personagens/npcs/)).
 
 ## Animações (sprite sheets)
 
-| Gordot | Spike | Thyr | Zork |
-|---|---|---|---|
-| ![Gordot](arte/personagens/folhas/gordot.gif) | ![Spike](arte/personagens/folhas/spike.gif) | ![Thyr](arte/personagens/folhas/thyr.gif) | ![Zork](arte/personagens/folhas/zork.gif) |
+| Spike | Gordot | Thyr | Zork | Mercenário |
+|---|---|---|---|---|
+| ![Spike](arte/personagens/folhas/spike.gif) | ![Gordot](arte/personagens/folhas/gordot.gif) | ![Thyr](arte/personagens/folhas/thyr.gif) | ![Zork](arte/personagens/folhas/zork.gif) | ![Mercenário](arte/personagens/folhas/mercenario.gif) |
 
-Cada personagem tem 7 animações: **parado, andar, ataque, habilidade, defesa, dano e derrota**.
+Desenhadas pela equipe (documento `sprites.docx`), em 3 folhas por personagem com grade de 3x4:
 
-| Personagem | Ataque | Habilidade |
-|---|---|---|
-| Gordot | ergue o machado e golpeia com rastro | **Machadada Venenosa**: machado brilha verde, rastro e respingo de veneno |
-| Spike | ergue o tronco e golpeia; poeira no impacto | **Muralha de Tronco**: ruge com o tronco erguido, aura vermelha no chão |
-| Thyr | jato de fogo saindo da espada | **Chama do Núcleo**: fagulhas sobem e explodem num anel de fogo |
-| Zork | estocada com a lança | salto com a lança, onda de choque e poeira ao cair |
+| Folha | Animações |
+|---|---|
+| combate 1 | guarda (parado), atacar, habilidade/combo, magia, item |
+| combate 2 | defender, dano, stagger, derrota, vitória |
+| exploração | andar de frente, de costas, de lado (a esquerda é o lado direito espelhado), interação, resgate/especial, alerta (!), retrato |
 
-Folhas de apresentação, com o nome de cada animação: [Gordot](arte/personagens/folhas/gordot_folha.png), [Spike](arte/personagens/folhas/spike_folha.png), [Thyr](arte/personagens/folhas/thyr_folha.png) e [Zork](arte/personagens/folhas/zork_folha.png).
+Folhas com o nome de cada animação: [Spike](arte/personagens/folhas/spike_folha.png), [Gordot](arte/personagens/folhas/gordot_folha.png), [Thyr](arte/personagens/folhas/thyr_folha.png), [Zork](arte/personagens/folhas/zork_folha.png), [Mercenário](arte/personagens/folhas/mercenario_folha.png).
 
-- O jogo usa `arte/personagens/monstros/<nome>_sprites.png` (uma linha por animação) e `<nome>_sprites.json` (quadros, fps e posição do pé). No combate, Spike e Gordot já tocam parado, ataque, habilidade, defesa, dano e derrota.
-- Os quadros são gerados por [`ferramentas/gerar_animacoes.py`](ferramentas/gerar_animacoes.py) **a partir das 3 poses desenhadas** de cada personagem, com respiração, inclinação, deslocamento, rotação e efeitos por cima. As poses não são redesenhadas.
-- **Limitação:** como só existem 3 poses, o **andar** é um balanço com passada e não um ciclo de pernas desenhado quadro a quadro. Para um andar completo, alguém precisa desenhar as poses intermediárias. É só adicioná-las na folha de modelos e no script.
-- Para refazer depois de mudar a folha de modelos: `python ferramentas/recortar_modelos.py` e em seguida `python ferramentas/gerar_animacoes.py`.
+- As folhas **originais** ficam em [`arte/sprites_originais/`](arte/sprites_originais/), junto com o cenário da sala do trono e as folhas de assets.
+- [`ferramentas/importar_sprites.py`](ferramentas/importar_sprites.py) troca o fundo por transparência **sem alterar o desenho**. Ele também apaga os títulos escritos sobre algumas folhas e reorganiza tudo em `<nome>_sprites.png` + `<nome>_sprites.json` (uma animação por linha, com fps e posição do pé), que é o que o jogo lê.
+- Se uma folha mudar, substitua o arquivo em `arte/sprites_originais/` (mesmo nome) e rode `python ferramentas/importar_sprites.py`.
 
 ## Arte conceitual (primeira versão)
 
@@ -107,41 +103,50 @@ Rascunhos visuais da primeira fase do projeto. **Atenção:** nesta versão o Sp
 | `arte/ui/` | Interface, caixas de diálogo, ícones |
 | `arte/conceitos/` | Rascunhos e concept art (primeira versão) |
 | `arte/referencias/` | Imagens de referência de cada personagem e do cenário |
-| `ferramentas/` | Scripts que recortam os modelos e geram as animações |
+| `arte/sprites_originais/` | Folhas de sprites originais da equipe (fonte) |
+| `arte/personagens/npcs/` | Vendedor e animal de carga |
+| `ferramentas/` | Script que importa as folhas de sprites |
+| `scripts/comum/` | Código compartilhado (montagem das animações) |
+| `scripts/exploracao/` | Exploração: jogador e sala do trono |
 | `animacoes/` | Sprite sheets e arquivos de animação |
 | `audio/` | Músicas e efeitos sonoros |
 
-## Protótipo atual: combate por turnos
+## Protótipo atual
 
 Feito em **Godot 4.7.2**. Para jogar, abra a Godot, clique em **Importar**, selecione o `project.godot` desta pasta e aperte **F5**.
 
-Ele reproduz a **Fase 1, Tela 5** do GDD: Spike e Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
+**1. Sala do Trono (Fase 1, Tela 1):** o jogo começa aqui.
+- O Spike anda pela sala com **setas ou WASD**: de frente, de costas e de lado.
+- Perto do trono, **Z** fala com o Imperador Zork. Ele está sentado e aponta enquanto dá a ordem de buscar cristais, e o diálogo mostra os retratos.
+- Depois da conversa, a escada de baixo leva ao combate. As Telas 2 a 4 ainda não existem.
 
+**2. Combate (Fase 1, Tela 5):** Spike e Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
 - Ordem de turnos pela velocidade. O Gordot **sempre age primeiro**.
-- O Spike é o tanque: tem **+20% de vida** e a **Muralha de Tronco**, que atrai os ataques inimigos por 2 turnos com 30% menos dano.
+- O Spike tem **+20% de vida** e a **Muralha de Tronco**, que atrai os ataques inimigos por 2 turnos com 30% menos dano.
 - O Gordot envenena com a **Machadada Venenosa**.
-- Ações disponíveis: Atacar, Defender, Especial (gasta SP), Item (Poção) e Fugir. Não dá para fugir porque é batalha de chefe.
 - **Combo:** o Gordot usa *Machadada Venenosa* e, na mesma rodada, o Spike usa *Esmagar com Tronco*. Isso dispara o **Esmagamento Tóxico**, que acerta todos os inimigos.
-- Ainda não implementado (previsto no GDD): MP para magias, stagger, moral, crítico com tempo e o Thyr no combate.
+- Ações disponíveis: Atacar, Defender, Especial (gasta SP), Item (Poção) e Fugir. Não dá para fugir porque é batalha de chefe.
+- Animações tocadas: guarda, ataque, habilidade, item, defesa, dano, derrota e vitória.
+- Os nomes das habilidades ainda são os antigos e precisam ser revistos junto com o GDD.
+- O **Líder** usa o sprite do mercenário, maior, até existir o sprite dele com a maça.
+- Ainda não implementado (previsto no GDD): MP para magias, stagger (a animação já existe), moral, crítico com tempo e o Thyr no combate.
 
 | Arquivo | Para que serve |
 |---|---|
 | `scripts/combate/banco_dados.gd` | Atributos, habilidades e combos. **Balanceamento é aqui.** |
 | `scripts/combate/combate.gd` | Turnos, menus e regras do combate |
-| `scripts/combate/combatente.gd` | Uma unidade em campo (vida, dano, desenho) |
+| `scripts/combate/combatente.gd` | Uma unidade em campo (vida, dano, animações) |
+| `scripts/exploracao/sala_do_trono.gd` | Sala do trono: cenário, Zork, diálogo e saída |
+| `scripts/exploracao/jogador.gd` | Movimentação do jogador (setas/WASD) |
+| `scripts/comum/folha_sprites.gd` | Monta as animações a partir de `<nome>_sprites.png/.json` |
 
-**Arte:** Spike e Gordot já aparecem com a pixel art. Os mercenários ainda são retângulos. Se um PNG **com fundo transparente** for salvo num destes caminhos, ele aparece sozinho no jogo:
-
-- `arte/inimigos/mercenario_lacaio.png`, `arte/inimigos/mercenario_lider.png`
-- `arte/cenarios/masmorra_1/fundo_combate.png` (fundo, 1280x720)
-
-**Teste automático** (simula uma batalha inteira e mostra o resultado no terminal):
+**Teste automático** (faz a sala do trono e a batalha inteira sozinho e mostra o resultado no terminal):
 
 ```
 Godot_v4.7.2-stable_win64_console.exe --headless --path . -- --autoteste
 ```
 
-Para ver a batalha automática em velocidade normal, com as animações, tire o `--headless` e acrescente `--lento` no final.
+Para ver a batalha automática em velocidade normal, com as animações, abra direto o combate e acrescente `--lento`: `Godot_v4.7.2-stable_win64_console.exe --path . res://cenas/combate.tscn -- --autoteste --lento`.
 
 ## Controles
 

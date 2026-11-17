@@ -133,6 +133,7 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			await _mensagem("%s se defende (recebe metade do dano)." % c.dados.nome)
 		"item":
 			pocoes -= 1
+			await c.tocar("item")
 			var curado: int = acao.alvo.curar(CURA_POCAO)
 			_numero_flutuante(acao.alvo, "+%d" % curado, Color.LIME_GREEN)
 			await _mensagem("%s usa uma Poção em %s: +%d HP." % [c.dados.nome, acao.alvo.dados.nome, curado])
@@ -229,6 +230,9 @@ func _finalizar(vitoria: bool) -> void:
 	lbl_turno.text = ""
 	lbl_mensagem.text = "VITÓRIA! O Mercenário Líder caiu." if vitoria else "DERROTA... os monstros caíram."
 	lbl_info.text = "Pressione Z para jogar de novo."
+	for c in (monstros if vitoria else inimigos):
+		if c.vivo:
+			c.tocar("vitoria")
 	if autoteste:
 		print("RESULTADO: %s em %d rodadas" % ["vitoria" if vitoria else "derrota", rodada])
 		get_tree().quit()

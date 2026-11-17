@@ -8,7 +8,7 @@ extends RefCounted
 
 ## Ogro tanque (GDD: possui vida adicional).
 static func spike() -> DadosUnidade:
-	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.8, 0.45, 0.2), Vector2(157, 143))
+	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.3, 0.5, 0.35), Vector2(150, 150))
 	d.bonus_vida = 0.2
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
 	d.animacoes = "res://arte/personagens/monstros/spike_sprites"
@@ -25,7 +25,7 @@ static func spike() -> DadosUnidade:
 
 ## Orc veloz e venenoso (GDD: grande velocidade, tende a agir primeiro).
 static func gordot() -> DadosUnidade:
-	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.4, 0.65, 0.25), Vector2(161, 126))
+	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.55, 0.35, 0.65), Vector2(160, 160))
 	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
 	d.animacoes = "res://arte/personagens/monstros/gordot_sprites"
@@ -37,7 +37,9 @@ static func gordot() -> DadosUnidade:
 
 static func mercenario_lacaio(numero: int) -> DadosUnidade:
 	var d := _unidade("Lacaio %d" % numero, false, 60, 0, 12, 4, 8, Color(0.6, 0.45, 0.3), Vector2(55, 100))
-	d.textura = _textura("res://arte/inimigos/mercenario_lacaio.png")
+	d.textura = _textura("res://arte/inimigos/mercenario.png")
+	d.animacoes = "res://arte/inimigos/mercenario_sprites"
+	d.tamanho = Vector2(150, 140)
 	d.espelhar = true
 	return d
 
@@ -45,7 +47,10 @@ static func mercenario_lacaio(numero: int) -> DadosUnidade:
 static func mercenario_lider() -> DadosUnidade:
 	var d := _unidade("Líder", false, 190, 0, 17, 8, 6, Color(0.55, 0.58, 0.65), Vector2(80, 125))
 	d.nivel = 2
-	d.textura = _textura("res://arte/inimigos/mercenario_lider.png")
+	# Provisório: ainda não há sprite do líder (maça de duas mãos); usa o mercenário maior
+	d.textura = _textura("res://arte/inimigos/mercenario.png")
+	d.animacoes = "res://arte/inimigos/mercenario_sprites"
+	d.tamanho = Vector2(170, 175)
 	d.espelhar = true
 	d.habilidades.assign([
 		_habilidade("Golpe de Maça", 0, 1.6, "Golpe pesado com a maça de duas mãos."),
