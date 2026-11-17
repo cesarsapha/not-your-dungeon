@@ -29,20 +29,22 @@ O objetivo é impedir a extinção dos monstros e recuperar a liberdade deles. L
 
 ![Personagens: pose parada](../arte/personagens/fichas_pixelart.png)
 
-Folha completa com poses de ataque e habilidade: [`modelos_definitivos.jpg`](../arte/personagens/modelos_definitivos.jpg).
+Animações completas de cada um em [`arte/personagens/folhas/`](../arte/personagens/folhas/).
 
 | Personagem | Papel | Atributo | Habilidade única |
 |---|---|---|---|
-| **Spike** | tanque (defesa) | vida adicional | **Muralha de Tronco:** atrai os ataques inimigos por 2 turnos e recebe 30% menos dano |
-| **Gordot** | agilidade (veneno) | grande velocidade, tende a agir primeiro | **Machadada Venenosa:** golpe rápido com o machado que envenena por 3 turnos; enche mais o stagger de quem já está envenenado |
-| **Thyr** | magia | ganha mais experiência | **Chama do Núcleo:** dano mágico em todos os inimigos, com chance de queimadura |
-| **Zork** | chefe da masmorra (não jogável) | — | — |
+| **Spike** | tanque (defesa) | vida adicional | **Investida Esmeralda:** investida pesada da cimitarra com rastro verde-dourado; depois atrai os ataques inimigos por 2 turnos e recebe 30% menos dano |
+| **Gordot** | agilidade (velocidade) | grande velocidade, tende a agir primeiro | **Investida Relâmpago:** ataque em altíssima velocidade com o tronco, com rastro ciano e amarelo; enche mais o stagger e abre espaço para combos |
+| **Thyr** | magia | ganha mais experiência | **Onda Infernal:** onda de fogo roxo-alaranjado pelo chão que atinge todos os inimigos, com chance de queimadura |
+| **Zork** | chefe da masmorra (não jogável) | — | **Lâminas Espectrais do Imperador:** invoca espadas espirituais e runas da aura contra os inimigos |
 
 **Aparência**
-- **Spike:** ogro corpulento de pele laranja com manchas amarelas nos ombros, presas inferiores, tanga marrom e um tronco como clava.
-- **Gordot:** criatura reptiliana de escamas verdes e barriga amarelada, cristas na cabeça, olhos amarelos, cauda longa, cachecol roxo e machado de lâmina larga com ponta de lança.
-- **Thyr:** guerreiro de pedra e armadura escura com fendas de lava, a cabeça tomada por chamas e uma espada incandescente que lança fogo.
-- **Zork:** cavaleiro de armadura negro-azulada com elmo coroado de chifres e espinhos, luz branca no rosto, cruz luminosa no peito, saiote roxo e lança longa.
+- **Spike:** réptil de escamas verde-escuras, com focinho de crocodilo, cauda grossa, cachecol roxo, ombreira roxa, saiote vinho rasgado e cimitarra larga e serrilhada.
+- **Gordot:** ogro enorme de pele roxa salpicada de manchas, barriga saliente, presas inferiores, tanga marrom e um tronco de madeira como porrete. Apesar do tamanho, é muito rápido.
+- **Thyr:** armadura escura e vazia, com uma chama (do branco-alaranjado ao magenta) saindo da gola, garra direita flamejante que goteja fogo e espada mágica incandescente na mão esquerda.
+- **Zork:** cavaleiro de armadura escura e pesada, com elmo de chifres, núcleo brilhante no peito, aura ciano pulsante, saiote roxo e lança longa. Arrogante, soberbo e preguiçoso.
+
+**NPCs:** Vendedor e Animal de carga ([`arte/personagens/npcs/`](../arte/personagens/npcs/)).
 
 Os monstros têm **especialidades naturais** (combate físico, defesa, magia, agilidade ou suporte), mas também podem aprender habilidades de fora da especialidade.
 

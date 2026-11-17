@@ -10,14 +10,12 @@ RPG tático por turnos em 2D, feito em **Godot**. O jogador comanda os **monstro
 
 ![Spike, Gordot, Thyr e Zork](arte/personagens/fichas_pixelart.png)
 
-| Personagem | Aparência (sprites) | Atributo (GDD) |
-|---|---|---|
-| **Spike** | réptil com cimitarra, cachecol roxo e cauda | vida adicional |
-| **Gordot** | ogro roxo com tronco de madeira | grande velocidade, age primeiro |
-| **Thyr** | armadura vazia com chama saindo da gola, garra e espada de fogo | ganha mais experiência |
-| **Zork** | cavaleiro escuro com elmo de chifres, lança e aura ciano | chefe da masmorra (não jogável) |
-
-> As descrições de **aparência e habilidade** dentro do GDD ainda falam dos modelos anteriores (Spike ogro, Gordot réptil). Falta a equipe revisar esse texto.
+| Personagem | Aparência (sprites) | Atributo (GDD) | Habilidade única |
+|---|---|---|---|
+| **Spike** | réptil com cimitarra, cachecol roxo e cauda | vida adicional | Investida Esmeralda |
+| **Gordot** | ogro roxo com tronco de madeira | grande velocidade, age primeiro | Investida Relâmpago |
+| **Thyr** | armadura vazia com chama saindo da gola, garra e espada de fogo | ganha mais experiência | Onda Infernal |
+| **Zork** | cavaleiro escuro com elmo de chifres, lança e aura ciano | chefe da masmorra (não jogável) | Lâminas Espectrais do Imperador |
 
 NPCs e inimigos: **Mercenário** ([folha](arte/personagens/folhas/mercenario_folha.png)), **Vendedor** e **Animal de carga** ([`arte/personagens/npcs/`](arte/personagens/npcs/)).
 
@@ -122,12 +120,11 @@ Feito em **Godot 4.7.2**. Para jogar, abra a Godot, clique em **Importar**, sele
 
 **2. Combate (Fase 1, Tela 5):** Spike e Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
 - Ordem de turnos pela velocidade. O Gordot **sempre age primeiro**.
-- O Spike tem **+20% de vida** e a **Muralha de Tronco**, que atrai os ataques inimigos por 2 turnos com 30% menos dano.
-- O Gordot envenena com a **Machadada Venenosa**.
-- **Combo:** o Gordot usa *Machadada Venenosa* e, na mesma rodada, o Spike usa *Esmagar com Tronco*. Isso dispara o **Esmagamento Tóxico**, que acerta todos os inimigos.
+- O Spike tem **+20% de vida** e a **Investida Esmeralda**: um golpe pesado que, depois, atrai os ataques inimigos por 2 turnos com 30% menos dano.
+- O Gordot ataca rápido com a **Investida Relâmpago**.
+- **Combo:** o Gordot usa *Investida Relâmpago* e, na mesma rodada, o Spike usa *Investida Esmeralda*. Isso dispara a **Investida Dupla**, que acerta todos os inimigos.
 - Ações disponíveis: Atacar, Defender, Especial (gasta SP), Item (Poção) e Fugir. Não dá para fugir porque é batalha de chefe.
 - Animações tocadas: guarda, ataque, habilidade, item, defesa, dano, derrota e vitória.
-- Os nomes das habilidades ainda são os antigos e precisam ser revistos junto com o GDD.
 - O **Líder** usa o sprite do mercenário, maior, até existir o sprite dele com a maça.
 - Ainda não implementado (previsto no GDD): MP para magias, stagger (a animação já existe), moral, crítico com tempo e o Thyr no combate.
 

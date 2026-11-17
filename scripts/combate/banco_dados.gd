@@ -6,31 +6,26 @@ extends RefCounted
 ## no lugar do retângulo colorido. O PNG precisa ter FUNDO TRANSPARENTE.
 
 
-## Ogro tanque (GDD: possui vida adicional).
+## Réptil tanque com cimitarra (GDD: possui vida adicional).
 static func spike() -> DadosUnidade:
 	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.3, 0.5, 0.35), Vector2(150, 150))
 	d.bonus_vida = 0.2
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
 	d.animacoes = "res://arte/personagens/monstros/spike_sprites"
-	var muralha := _habilidade("Muralha de Tronco", 8, 0.0, "Atrai os ataques inimigos para si por 2 turnos e recebe 30% menos dano.")
-	muralha.provocar_turnos = 2
-	var esmagar := _habilidade("Esmagar com Tronco", 10, 1.8, "Golpe pesado com o tronco. Se Gordot usou Machadada Venenosa na mesma rodada, dispara o COMBO.")
-	esmagar.animacao = "ataque"
-	d.habilidades.assign([
-		muralha,
-		esmagar,
-	])
+	var investida := _habilidade("Investida Esmeralda", 10, 1.7, "Investida pesada com a cimitarra. Depois do golpe, atrai os ataques inimigos por 2 turnos (30% menos dano). Se Gordot usou Investida Relâmpago na mesma rodada, dispara o COMBO.")
+	investida.provocar_turnos = 2
+	d.habilidades.assign([investida])
 	return d
 
 
-## Orc veloz e venenoso (GDD: grande velocidade, tende a agir primeiro).
+## Ogro roxo e veloz (GDD: grande velocidade, tende a agir primeiro).
 static func gordot() -> DadosUnidade:
 	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.55, 0.35, 0.65), Vector2(160, 160))
 	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
 	d.animacoes = "res://arte/personagens/monstros/gordot_sprites"
 	d.habilidades.assign([
-		_habilidade("Machadada Venenosa", 8, 1.3, "Golpe rápido com o machado que envenena o alvo por 3 turnos.", false, 3, 6),
+		_habilidade("Investida Relâmpago", 8, 1.5, "Dispara em altíssima velocidade com o tronco e acerta antes que o inimigo reaja."),
 	])
 	return d
 
@@ -60,11 +55,11 @@ static func mercenario_lider() -> DadosUnidade:
 
 static func combos() -> Array[Combo]:
 	var c := Combo.new()
-	c.nome = "Esmagamento Tóxico"
+	c.nome = "Investida Dupla"
 	c.primeiro_unidade = "Gordot"
-	c.primeiro_habilidade = "Machadada Venenosa"
+	c.primeiro_habilidade = "Investida Relâmpago"
 	c.segundo_unidade = "Spike"
-	c.segundo_habilidade = "Esmagar com Tronco"
+	c.segundo_habilidade = "Investida Esmeralda"
 	c.multiplicador = 0.8
 	var lista: Array[Combo] = [c]
 	return lista

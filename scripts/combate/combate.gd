@@ -141,7 +141,8 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 			var h: Habilidade = acao.habilidade
 			c.sp -= h.custo_sp
 			_atualizar_status()
-			if h.provocar_turnos > 0:
+			if h.provocar_turnos > 0 and h.multiplicador <= 0.0:
+				# só provoca, sem dano
 				c.provocando = h.provocar_turnos
 				await c.tocar("habilidade")
 				acoes_rodada.append({"unidade": c.dados.nome, "habilidade": h.nome})
@@ -155,6 +156,10 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 					alvo.veneno_dano = h.veneno_dano
 					alvo.queue_redraw()
 					await _mensagem("%s foi envenenado!" % alvo.dados.nome, 0.7)
+			if h.provocar_turnos > 0:
+				# golpe que também provoca (ex.: Investida Esmeralda do Spike)
+				c.provocando = h.provocar_turnos
+				await _mensagem("%s atrai os ataques inimigos para si!" % c.dados.nome, 0.8)
 			acoes_rodada.append({"unidade": c.dados.nome, "habilidade": h.nome})
 			await _checar_combo(c, h)
 
@@ -282,7 +287,7 @@ func _confirmar_menu() -> void:
 			lbl_info.text = "SP insuficiente para %s!" % h.nome
 			return
 		acao_pendente = {"tipo": "habilidade", "habilidade": h}
-		if h.alvo_todos or h.provocar_turnos > 0:
+		if h.alvo_todos or (h.provocar_turnos > 0 and h.multiplicador <= 0.0):
 			_emitir(acao_pendente)
 		else:
 			_escolher_alvo(_vivos(inimigos))
@@ -508,12 +513,12 @@ func _buscar_monstro(nome: String) -> Combatente:
 	return null
 
 
-## Usado só no --autoteste: Spike provoca na 1ª rodada; depois Gordot prepara o combo e Spike o completa.
+## Usado só no --autoteste: Gordot prepara o combo e Spike o completa.
 func _acao_automatica(c: Combatente) -> Dictionary:
 	var alvo: Combatente = _vivos(inimigos)[0]
-	var preferida := "Machadada Venenosa"
+	var preferida := "Investida Relâmpago"
 	if c.dados.nome == "Spike":
-		preferida = "Muralha de Tronco" if rodada == 1 else "Esmagar com Tronco"
+		preferida = "Investida Esmeralda"
 	for h in c.dados.habilidades:
 		if h.nome == preferida and c.sp >= h.custo_sp:
 			return {"tipo": "habilidade", "habilidade": h, "alvo": alvo}
