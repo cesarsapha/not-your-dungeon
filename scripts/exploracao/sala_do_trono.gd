@@ -7,7 +7,7 @@ extends Node2D
 ## Teste automático: Godot --path . -- --autoteste   (faz o caminho todo sozinho)
 
 const CENARIO := "res://arte/cenarios/masmorra_1/sala_do_trono.png"
-const PROXIMA_CENA := "res://cenas/combate.tscn"
+const PROXIMA_CENA := "res://cenas/corredor.tscn"
 const DISTANCIA_CONVERSA := 150.0
 
 # Falas provisórias: ajustem o texto à vontade.

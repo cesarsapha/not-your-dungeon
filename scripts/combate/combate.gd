@@ -1,6 +1,6 @@
 extends Node2D
-## Protótipo de combate por turnos (GDD: Fase 1, Tela 5).
-## Spike + Gordot contra 2 Mercenários Lacaios e o Mercenário Líder (chefe).
+## Combate por turnos da primeira fase.
+## Reutilizado na sala de resgate e no confronto final.
 ##
 ## Controles: setas navegam, Z confirma, X volta.
 ## Teste automático (sem jogador):  Godot --path . -- --autoteste   (acrescente --lento para ver em velocidade normal)
@@ -9,8 +9,25 @@ enum Estado { AGUARDANDO, MENU_ACAO, MENU_ESPECIAL, ESCOLHER_ALVO }
 
 signal acao_escolhida(acao: Dictionary)
 
-const POS_MONSTROS := [Vector2(430, 390), Vector2(260, 480)]
-const POS_INIMIGOS := [Vector2(820, 350), Vector2(1070, 440), Vector2(910, 510)]
+# Posições dos aliados durante o combate.
+const POS_MONSTROS := [
+	Vector2(390, 390),
+	Vector2(280, 490)
+]
+
+# Posições dos inimigos durante o combate.
+const POS_INIMIGOS := [
+	Vector2(850, 390),
+	Vector2(980, 470),
+	Vector2(790, 500)
+]
+# No confronto final, o líder ocupa a primeira linha, mais perto dos monstros.
+# A ordem corresponde a lacaio, líder e arqueiro no banco de dados.
+const POS_INIMIGOS_FINAL := [
+	Vector2(970, 345),
+	Vector2(755, 430),
+	Vector2(1000, 485)
+]
 const CURA_POCAO := 40
 
 var monstros: Array[Combatente] = []
@@ -28,7 +45,11 @@ var acao_pendente := {}
 var acoes_rodada: Array[Dictionary] = []
 var pocoes := 2
 var rodada := 0
+# O encontro é informado pela exploração através dos metadados da SceneTree.
+# Sem informação, mantém o combate final como teste independente.
+var encontro := "final"
 var batalha_chefe := true
+var vitoria_obtida := false
 var fim := false
 var autoteste := false
 
@@ -44,10 +65,15 @@ func _ready() -> void:
 	autoteste = "--autoteste" in OS.get_cmdline_user_args()
 	if autoteste and not "--lento" in OS.get_cmdline_user_args():
 		Engine.time_scale = 20.0
+	encontro = str(get_tree().get_meta("encontro", "final"))
+	batalha_chefe = encontro != "resgate"
 	_montar_fundo()
 	_montar_ui()
 	_criar_combatentes()
-	await _mensagem("Os mercenários avançam, liderados pelo Mercenário Líder!", 1.5)
+	if encontro == "resgate":
+		await _mensagem("Os mercenários impedem o resgate de Gordot!", 1.5)
+	else:
+		await _mensagem("Os mercenários avançam, liderados pelo Mercenário Líder!", 1.5)
 	_loop_combate()
 
 
@@ -77,7 +103,7 @@ func _loop_combate() -> void:
 				return
 
 
-## Gordot sempre age primeiro; os outros seguem a velocidade.
+## Spike sempre age primeiro; os outros seguem a velocidade.
 func _ordem_turnos() -> Array[Combatente]:
 	var todos: Array[Combatente] = []
 	todos.assign(_vivos(monstros) + _vivos(inimigos))
@@ -157,7 +183,7 @@ func _executar(c: Combatente, acao: Dictionary) -> void:
 					alvo.queue_redraw()
 					await _mensagem("%s foi envenenado!" % alvo.dados.nome, 0.7)
 			if h.provocar_turnos > 0:
-				# golpe que também provoca (ex.: Investida Esmeralda do Spike)
+				# golpe que também provoca (ex.: Impacto Colossal do Gordot)
 				c.provocando = h.provocar_turnos
 				await _mensagem("%s atrai os ataques inimigos para si!" % c.dados.nome, 0.8)
 			acoes_rodada.append({"unidade": c.dados.nome, "habilidade": h.nome})
@@ -230,11 +256,15 @@ func _checar_fim() -> bool:
 
 func _finalizar(vitoria: bool) -> void:
 	fim = true
+	vitoria_obtida = vitoria
 	estado = Estado.AGUARDANDO
 	lbl_menu.text = ""
 	lbl_turno.text = ""
 	lbl_mensagem.text = "VITÓRIA! O Mercenário Líder caiu." if vitoria else "DERROTA... os monstros caíram."
 	lbl_info.text = "Pressione Z para jogar de novo."
+	if encontro == "resgate" and vitoria:
+		lbl_mensagem.text = "VITÓRIA! Os mercenários deixaram uma chave."
+		lbl_info.text = "Pressione Z para retornar à sala de resgate."
 	for c in (monstros if vitoria else inimigos):
 		if c.vivo:
 			c.tocar("vitoria")
@@ -313,6 +343,8 @@ func _confirmar_menu() -> void:
 		4:
 			if batalha_chefe:
 				lbl_info.text = "Não é possível fugir de uma batalha contra chefe!"
+			else:
+				lbl_info.text = "Não é possível fugir durante o resgate!"
 
 
 func _escolher_alvo(lista: Array[Combatente]) -> void:
@@ -353,7 +385,14 @@ func _emitir(acao: Dictionary) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if fim:
 		if event.is_action_pressed("confirmar"):
-			get_tree().reload_current_scene()
+			# Registra a vitória antes de retornar à exploração.
+			# A SceneTree permanece viva durante as trocas de cena.
+			if encontro == "resgate" and vitoria_obtida:
+				get_tree().set_meta("resgate_vencido", true)
+				get_tree().remove_meta("encontro")
+				get_tree().change_scene_to_file("res://cenas/sala_resgate.tscn")
+			else:
+				get_tree().reload_current_scene()
 		return
 
 	match estado:
@@ -387,37 +426,77 @@ func _unhandled_input(event: InputEvent) -> void:
 # ---------------------------------------------------------------- Montagem
 
 func _criar_combatentes() -> void:
-	var dados_monstros := [BancoDados.spike(), BancoDados.gordot()]
+	# Spike luta sozinho no resgate; Gordot entra na equipe no confronto final.
+	var dados_monstros: Array[DadosUnidade] = [BancoDados.spike()]
+	var dados_inimigos: Array[DadosUnidade] = []
+
+	if encontro == "resgate":
+		dados_inimigos.assign([
+			BancoDados.mercenario_lacaio(1),
+			BancoDados.mercenario_arqueiro()
+		])
+	else:
+		dados_monstros.append(BancoDados.gordot())
+		dados_inimigos.assign([
+			BancoDados.mercenario_lacaio(1),
+			BancoDados.mercenario_lider(),
+			BancoDados.mercenario_arqueiro()
+		])
+
 	for i in dados_monstros.size():
 		monstros.append(_novo_combatente(dados_monstros[i], POS_MONSTROS[i]))
-	var dados_inimigos := [BancoDados.mercenario_lacaio(1), BancoDados.mercenario_lider(), BancoDados.mercenario_lacaio(2)]
 	for i in dados_inimigos.size():
-		inimigos.append(_novo_combatente(dados_inimigos[i], POS_INIMIGOS[i]))
+		var pos: Vector2 = POS_INIMIGOS[i] if encontro == "resgate" else POS_INIMIGOS_FINAL[i]
+		inimigos.append(_novo_combatente(dados_inimigos[i], pos))
 	_atualizar_status()
 
 
+# Cria uma unidade e posiciona no campo de batalha.
 func _novo_combatente(d: DadosUnidade, pos: Vector2) -> Combatente:
 	var c := Combatente.new()
 	c.position = pos
+
+	# Mantém a escala aprovada para os combatentes comuns.
+	# O líder é maior para destacar sua presença no confronto final.
+	var escala_visual := 1.1 if d.nome == "Líder" else 0.8
+	c.scale = Vector2(escala_visual, escala_visual)
+
 	add_child(c)
 	c.configurar(d)
+
 	return c
 
 
+# Seleciona a imagem de acordo com o encontro.
+func _caminho_fundo() -> String:
+	if encontro == "resgate":
+		return "res://arte/cenarios/masmorra_1/sala_resgate.png"
+	return "res://arte/cenarios/masmorra_1/sala_final.png"
+
+
 func _montar_fundo() -> void:
-	var caminho := "res://arte/cenarios/masmorra_1/fundo_combate.png"
+	var caminho := _caminho_fundo()
+
 	if ResourceLoader.exists(caminho):
 		var fundo := Sprite2D.new()
 		fundo.texture = load(caminho)
 		fundo.centered = false
-		fundo.scale = Vector2(1280.0, 720.0) / fundo.texture.get_size()
-		add_child(fundo)
+
+		# Amplia o cenário para preencher toda a largura
+		# da tela durante o combate.
+		var escala := 1280.0 / fundo.texture.get_width()
+
+		fundo.scale = Vector2(escala, escala)
+
+		# Desloca o cenário para destacar o chão da sala.
+		fundo.position = Vector2(0, -180)
+
+		add_child(fundo)	
 
 
 func _draw() -> void:
-	if not ResourceLoader.exists("res://arte/cenarios/masmorra_1/fundo_combate.png"):
-		draw_rect(Rect2(0, 0, 1280, 720), Color(0.07, 0.05, 0.09))
-		draw_rect(Rect2(0, 260, 1280, 280), Color(0.13, 0.11, 0.15))
+	# Fundo provisório caso a imagem não exista.
+	draw_rect(Rect2(0, 0, 1280, 720), Color(0.07, 0.05, 0.09))
 
 
 func _montar_ui() -> void:
@@ -513,10 +592,10 @@ func _buscar_monstro(nome: String) -> Combatente:
 	return null
 
 
-## Usado só no --autoteste: Gordot prepara o combo e Spike o completa.
+## Usado só no --autoteste: Spike prepara o combo e Gordot o completa.
 func _acao_automatica(c: Combatente) -> Dictionary:
 	var alvo: Combatente = _vivos(inimigos)[0]
-	var preferida := "Investida Relâmpago"
+	var preferida := "Impacto Colossal"
 	if c.dados.nome == "Spike":
 		preferida = "Investida Esmeralda"
 	for h in c.dados.habilidades:

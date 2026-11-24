@@ -6,45 +6,51 @@ extends RefCounted
 ## no lugar do retângulo colorido. O PNG precisa ter FUNDO TRANSPARENTE.
 
 
-## Réptil tanque com cimitarra (GDD: possui vida adicional).
+## Réptil veloz com cimitarra (GDD: grande velocidade, tende a agir primeiro).
 static func spike() -> DadosUnidade:
-	var d := _unidade("Spike", true, 160, 30, 16, 10, 4, Color(0.3, 0.5, 0.35), Vector2(150, 150))
-	d.bonus_vida = 0.2
+	var d := _unidade("Spike", true, 120, 40, 20, 6, 14, Color(0.3, 0.5, 0.35), Vector2(150, 150))
+	d.sempre_primeiro = true
 	d.textura = _textura("res://arte/personagens/monstros/spike.png")
 	d.animacoes = "res://arte/personagens/monstros/spike_sprites"
-	var investida := _habilidade("Investida Esmeralda", 10, 1.7, "Investida pesada com a cimitarra. Depois do golpe, atrai os ataques inimigos por 2 turnos (30% menos dano). Se Gordot usou Investida Relâmpago na mesma rodada, dispara o COMBO.")
+	var investida := _habilidade("Investida Esmeralda", 8, 1.5, "Investida rápida com a cimitarra. Prepara o combo com Gordot.")
+	d.habilidades.assign([investida])
+	d.habilidades.assign([investida])
+	return d
+
+
+## Ogro roxo e tanque (GDD: possui vida adicional).
+static func gordot() -> DadosUnidade:
+	var d := _unidade("Gordot", true, 160, 30, 16, 10, 4, Color(0.55, 0.35, 0.65), Vector2(160, 160))
+	d.bonus_vida = 0.2
+	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
+	d.animacoes = "res://arte/personagens/monstros/gordot_sprites"
+	var investida := _habilidade("Impacto Colossal", 10, 1.7, "Golpe pesado com o tronco. Atrai os ataques inimigos por 2 turnos e reduz o dano recebido em 30%. Completa o combo iniciado por Spike.")
 	investida.provocar_turnos = 2
 	d.habilidades.assign([investida])
 	return d
 
 
-## Ogro roxo e veloz (GDD: grande velocidade, tende a agir primeiro).
-static func gordot() -> DadosUnidade:
-	var d := _unidade("Gordot", true, 110, 40, 15, 6, 14, Color(0.55, 0.35, 0.65), Vector2(160, 160))
-	d.sempre_primeiro = true
-	d.textura = _textura("res://arte/personagens/monstros/gordot.png")
-	d.animacoes = "res://arte/personagens/monstros/gordot_sprites"
-	d.habilidades.assign([
-		_habilidade("Investida Relâmpago", 8, 1.5, "Dispara em altíssima velocidade com o tronco e acerta antes que o inimigo reaja."),
-	])
-	return d
-
-
 static func mercenario_lacaio(numero: int) -> DadosUnidade:
-	var d := _unidade("Lacaio %d" % numero, false, 60, 0, 12, 4, 8, Color(0.6, 0.45, 0.3), Vector2(55, 100))
+	var d := _unidade("Lacaio %d" % numero, false, 45, 0, 12, 4, 8, Color(0.6, 0.45, 0.3), Vector2(55, 100))
 	d.textura = _textura("res://arte/inimigos/mercenario.png")
 	d.animacoes = "res://arte/inimigos/mercenario_sprites"
 	d.tamanho = Vector2(150, 140)
 	d.espelhar = true
 	return d
 
+static func mercenario_arqueiro() -> DadosUnidade:
+	var d := _unidade("Arqueiro", false, 35, 0, 14, 2, 10, Color(0.6, 0.45, 0.3), Vector2(150, 140))
+	d.textura = _textura("res://arte/inimigos/mercenario_arqueiro.png")
+	d.animacoes = "res://arte/inimigos/mercenario_arqueiro_sprites"
+	d.espelhar = true
+	return d
 
 static func mercenario_lider() -> DadosUnidade:
 	var d := _unidade("Líder", false, 190, 0, 17, 8, 6, Color(0.55, 0.58, 0.65), Vector2(80, 125))
 	d.nivel = 2
 	# Provisório: ainda não há sprite do líder (maça de duas mãos); usa o mercenário maior
-	d.textura = _textura("res://arte/inimigos/mercenario.png")
-	d.animacoes = "res://arte/inimigos/mercenario_sprites"
+	d.textura = _textura("res://arte/inimigos/mercenario_chefe.png")
+	d.animacoes = "res://arte/inimigos/mercenario_chefe_sprites"
 	d.tamanho = Vector2(170, 175)
 	d.espelhar = true
 	d.habilidades.assign([
@@ -56,10 +62,10 @@ static func mercenario_lider() -> DadosUnidade:
 static func combos() -> Array[Combo]:
 	var c := Combo.new()
 	c.nome = "Investida Dupla"
-	c.primeiro_unidade = "Gordot"
-	c.primeiro_habilidade = "Investida Relâmpago"
-	c.segundo_unidade = "Spike"
-	c.segundo_habilidade = "Investida Esmeralda"
+	c.primeiro_unidade = "Spike"
+	c.primeiro_habilidade = "Investida Esmeralda"
+	c.segundo_unidade = "Gordot"
+	c.segundo_habilidade = "Impacto Colossal"
 	c.multiplicador = 0.8
 	var lista: Array[Combo] = [c]
 	return lista

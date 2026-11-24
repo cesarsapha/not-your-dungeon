@@ -62,8 +62,15 @@ NOMES = {
     "interacao": "INTERAÇÃO", "especial": "RESGATE / ESPECIAL", "alerta": "ALERTA (!)", "retrato": "RETRATO",
 }
 
-PERSONAGENS = [("spike", MONSTROS), ("gordot", MONSTROS), ("thyr", MONSTROS), ("zork", MONSTROS),
-               ("mercenario", INIMIGOS)]
+PERSONAGENS = [
+    ("spike", MONSTROS),
+    ("gordot", MONSTROS),
+    ("thyr", MONSTROS),
+    ("zork", MONSTROS),
+    ("mercenario", INIMIGOS),
+    ("mercenario_arqueiro", INIMIGOS),
+    ("mercenario_chefe", INIMIGOS)
+]
 
 
 # ------------------------------------------------------------------ limpeza
@@ -199,10 +206,19 @@ def pe_e_altura(rgba):
 def importar(nome, pasta):
     folhas = {}
     for tipo in ("combate1", "combate2", "exploracao"):
-        folhas[tipo] = quadros_da_folha(ORIGINAIS / f"{nome}_{tipo}.png")
+        caminho = ORIGINAIS / f"{nome}_{tipo}.png"
+
+        if tipo == "exploracao" and not caminho.exists():
+            continue
+
+        folhas[tipo] = quadros_da_folha(caminho)
+
     qw = max(q.shape[1] for f in folhas.values() for q in f.values())
     qh = max(q.shape[0] for f in folhas.values() for q in f.values())
-    ordem = list(ANIMACOES)
+    ordem = [
+    anim for anim, info in ANIMACOES.items()
+    if info[0] in folhas
+    ]
     folha = Image.new("RGBA", (qw * COLUNAS, qh * len(ordem)), (0, 0, 0, 0))
     meta = {"quadro": [qw, qh], "animacoes": {}}
     for i, anim in enumerate(ordem):
@@ -306,8 +322,10 @@ def gerar_gifs():
 
 def gerar_ficha():
     """Os quatro personagens principais lado a lado (pose parada), com nome e papel."""
-    lista = [("spike", "SPIKE", "vida adicional"), ("gordot", "GORDOT", "veloz"),
-             ("thyr", "THYR", "mago"), ("zork", "ZORK", "chefe (NPC)")]
+    lista = [("spike", "SPIKE", "veloz"),
+         ("gordot", "GORDOT", "vida adicional"),
+         ("thyr", "THYR", "mago"),
+         ("zork", "ZORK", "chefe (NPC)")]
     imgs = [(Image.open(MONSTROS / f"{n}.png"), t, p) for n, t, p in lista]
     margem = 40
     alto = max(i.height for i, _, _ in imgs)
@@ -329,10 +347,28 @@ def gerar_ficha():
     ficha.save(RAIZ / "arte" / "personagens" / "fichas_pixelart.png")
     print("gerado: fichas_pixelart.png", ficha.size)
 
+def importar_estaticos():
+    saida_monstros = RAIZ / "arte" / "personagens" / "monstros"
+    saida_objetos = RAIZ / "arte" / "objetos"
+    saida_monstros.mkdir(parents=True, exist_ok=True)
+    saida_objetos.mkdir(parents=True, exist_ok=True)
+
+    # Gordot preso
+    rgb = np.array(Image.open(ORIGINAIS / "gordot_preso.png").convert("RGB"))
+    img = Image.fromarray(tirar_fundo(rgb))
+    img.crop(img.getbbox()).save(saida_monstros / "gordot_preso.png")
+
+    # Flecha
+    rgb = np.array(Image.open(ORIGINAIS / "flecha.png").convert("RGB"))
+    img = Image.fromarray(tirar_fundo(rgb))
+    img.crop(img.getbbox()).save(saida_objetos / "flecha.png")
+
+    print("importado: gordot_preso, flecha")
 
 if __name__ == "__main__":
     for nome, pasta in PERSONAGENS:
         importar(nome, pasta)
     importar_npcs()
+    importar_estaticos()
     gerar_ficha()
     gerar_gifs()
