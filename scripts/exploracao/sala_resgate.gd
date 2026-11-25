@@ -32,7 +32,7 @@ const DIALOGO := [
 var jogador: Jogador
 var gordot_preso: Sprite2D
 var gordot_livre: AnimatedSprite2D
-var chave: Polygon2D
+var chave: ItemColetavel
 var aviso: Label
 var ponto_chave: Vector2
 var mensagem_temporaria := false
@@ -234,15 +234,9 @@ func _iniciar_combate() -> void:
 
 # -------------------------------------------------- Chave e resgate
 
-# Representação temporária da chave, sem depender de uma textura.
+# Chave das correntes no chão (sprite de arte/objetos/chave_sprites).
 func _criar_chave() -> void:
-	chave = Polygon2D.new()
-	chave.polygon = PackedVector2Array([
-		Vector2(0, -10), Vector2(10, 0),
-		Vector2(0, 10), Vector2(-10, 0)
-	])
-	chave.color = Color.GOLD
-	chave.position = ponto_chave
+	chave = ItemColetavel.criar("res://arte/objetos/chave_sprites", ponto_chave, 26.0)
 	add_child(chave)
 
 
@@ -313,7 +307,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if is_instance_valid(chave) and jogador.position.distance_to(ponto_chave) <= DISTANCIA_CHAVE:
 		# Registra a chave como item de missão, sem inventário visual.
 		get_tree().set_meta("chave_coletada", true)
-		chave.queue_free()
+		chave.coletar()      # anima a coleta e some sozinha
 		chave = null
 		await _mensagem("Chave das correntes obtida!")
 	elif not get_tree().get_meta("gordot_recrutado", false) and get_tree().get_meta("chave_coletada", false) and jogador.position.distance_to(ponto_resgate) <= DISTANCIA_GORDOT:

@@ -180,7 +180,10 @@ func _process(_delta: float) -> void:
 	) <= DISTANCIA_INTERACAO
 
 	if perto_cristal and not emboscada_ativada:
-		_mostrar_aviso("[Z] Minerar")
+		if get_tree().get_meta("picareta_coletada", false):
+			_mostrar_aviso("[Z] Minerar")
+		else:
+			_mostrar_aviso("Preciso de uma picareta para minerar.")
 
 	elif perto_saida:
 		if emboscada_ativada:
@@ -210,7 +213,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		return
 
 	if jogador.position.distance_to(ponto_mineracao) <= DISTANCIA_INTERACAO:
-		_minerar()
+		if get_tree().get_meta("picareta_coletada", false):
+			_minerar()
 
 
 # -------------------------------------------------- Mineração

@@ -39,6 +39,9 @@ var img_retrato: TextureRect
 func _ready() -> void:
 	autoteste = "--autoteste" in OS.get_cmdline_user_args()
 	RenderingServer.set_default_clear_color(Color(0.04, 0.05, 0.07))   # laterais fora do cenário
+	# Começo da fase: o Spike ainda não tem a picareta do corredor
+	if get_tree().has_meta("picareta_coletada"):
+		get_tree().remove_meta("picareta_coletada")
 	_montar_cenario()
 	_montar_ui()
 	_atualizar_objetivo()

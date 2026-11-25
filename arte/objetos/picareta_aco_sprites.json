@@ -1,0 +1,25 @@
+{
+  "quadro": [
+    183,
+    174
+  ],
+  "pe": [
+    91,
+    166
+  ],
+  "altura_corpo": 94,
+  "animacoes": {
+    "chao": {
+      "linha": 0,
+      "quadros": 6,
+      "fps": 6,
+      "repete": true
+    },
+    "coleta": {
+      "linha": 1,
+      "quadros": 4,
+      "fps": 10,
+      "repete": false
+    }
+  }
+}
