@@ -23,6 +23,12 @@ Projeto acadêmico em desenvolvimento. A versão atual concentra-se na primeira 
 
 ## Protótipo atual
 
+O jogo abre na **tela inicial**, com o logo sobre a sala do trono escurecida, tochas piscando e fagulhas de cristal.
+- **Jogar** começa um jogo novo, sem o progresso anterior da sessão, na sala do trono.
+- **Sair** fecha o jogo.
+- Para escolher: setas, W/S ou o mouse. Para confirmar: Z, Enter ou clique.
+- Código em [`scripts/menu/tela_inicial.gd`](scripts/menu/tela_inicial.gd).
+
 A primeira fase apresenta cinco ambientes conectados, com exploração em perspectiva superior 3/4, cenários em pixel art, diálogos com retratos e combates em telas próprias.
 
 | Tela | Cenário | Acontecimento |
